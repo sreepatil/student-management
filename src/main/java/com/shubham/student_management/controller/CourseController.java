@@ -28,11 +28,14 @@ public class CourseController {
     @GetMapping("/list")
     public String listCourses(
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(value = "message", required = false) String message,
             Model model) {
 
-        Page<Courses> courses = courseService.getCourses(page);
+        Page<CourseDto> courses = courseService.getCourses(page, size);
 
         model.addAttribute("courses", courses);
+        model.addAttribute("message", message);
 
         return "courses";
     }

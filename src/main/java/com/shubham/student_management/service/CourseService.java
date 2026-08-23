@@ -8,7 +8,7 @@ public interface CourseService {
 
     CourseDto createCourse(CourseDto courseDto);
 
-    Page<Courses> getCourses(int page);
+    Page<CourseDto> getCourses(int page, int size);
 
     boolean existsByCourseCode(String code);
 }

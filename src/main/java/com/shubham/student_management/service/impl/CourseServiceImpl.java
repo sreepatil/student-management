@@ -6,9 +6,9 @@ import com.shubham.student_management.entity.Courses;
 import com.shubham.student_management.repository.CourseRepository;
 import com.shubham.student_management.service.CourseService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,20 +18,45 @@ import org.springframework.transaction.annotation.Transactional;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public CourseDto createCourse(CourseDto courseDto) {
-        Courses courses = modelMapper.map(courseDto, Courses.class);
+
+        Courses courses = new Courses();
+
+        courses.setCourseName(courseDto.courseName());
+        courses.setCourseCode(courseDto.courseCode());
+        courses.setDuration(courseDto.duration());
+        courses.setFee(courseDto.fee());
+        courses.setDescription(courseDto.description());
+
         courseRepository.save(courses);
-        return modelMapper.map(courses, CourseDto.class);
+
+        return new CourseDto(
+                courses.getId(),
+                courses.getCourseName(),
+                courses.getCourseCode(),
+                courses.getDuration(),
+                courses.getFee(),
+                courses.getDescription()
+        );
     }
 
     @Override
-    public Page<Courses> getCourses(int page) {
-        return courseRepository.findAll(
-                PageRequest.of(page, 10)
-        );
+    public Page<CourseDto> getCourses(int page, int size) {
+
+        PageRequest pageRequest =
+                PageRequest.of(page, size, Sort.Direction.DESC, "id");
+
+        return courseRepository.findByActiveTrue(pageRequest)
+                .map(course -> new CourseDto(
+                        course.getId(),
+                        course.getCourseName(),
+                        course.getCourseCode(),
+                        course.getDuration(),
+                        course.getFee(),
+                        course.getDescription()
+                ));
     }
 
     @Override
