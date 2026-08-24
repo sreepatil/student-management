@@ -22,6 +22,8 @@ public record CourseDto(
         BigDecimal fee,
 
         @Size(min = 3, max = 500, message = "description should be between 3 to 500 characters")
-        String description
+        String description,
+
+        boolean active
 ) {
 }

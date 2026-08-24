@@ -17,20 +17,14 @@ public class DataInitializer {
 
         return args -> {
 
-            System.out.println("========== DataInitializer running ==========");
-
             if (!userRepository.existsByUsername("Admin")) {
 
                 User user = new User();
                 user.setUsername("Admin");
-                user.setPassword(passwordEncoder.encode("admin@123"));
+                user.setPassword(passwordEncoder.encode("aaa"));
                 user.setActive(true);
 
                 userRepository.save(user);
-
-                System.out.println("========== Admin user created ==========");
-            } else {
-                System.out.println("========== Admin already exists ==========");
             }
         };
     }

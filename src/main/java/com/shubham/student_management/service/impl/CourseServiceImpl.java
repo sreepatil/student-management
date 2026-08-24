@@ -1,6 +1,5 @@
 package com.shubham.student_management.service.impl;
 
-import com.shubham.student_management.config.ModelMapperConfig;
 import com.shubham.student_management.dto.CourseDto;
 import com.shubham.student_management.entity.Courses;
 import com.shubham.student_management.repository.CourseRepository;
@@ -38,7 +37,8 @@ public class CourseServiceImpl implements CourseService {
                 courses.getCourseCode(),
                 courses.getDuration(),
                 courses.getFee(),
-                courses.getDescription()
+                courses.getDescription(),
+                courses.isActive()
         );
     }
 
@@ -55,12 +55,59 @@ public class CourseServiceImpl implements CourseService {
                         course.getCourseCode(),
                         course.getDuration(),
                         course.getFee(),
-                        course.getDescription()
+                        course.getDescription(),
+                        course.isActive()
                 ));
     }
 
     @Override
     public boolean existsByCourseCode(String code) {
         return courseRepository.existsByCourseCodeIgnoreCase(code);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CourseDto getCourseId(Long id) {
+        Courses course = courseRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Course Not Found"));
+        return new  CourseDto(
+                        course.getId(),
+                        course.getCourseName(),
+                        course.getCourseCode(),
+                        course.getDuration(),
+                        course.getFee(),
+                        course.getDescription(),
+                        course.isActive());
+    }
+
+    @Override
+    public CourseDto updateCourse(Long id, CourseDto courseDto) {
+
+        Courses course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course Not Found"));
+
+        course.setCourseName(courseDto.courseName());
+        course.setCourseCode(courseDto.courseCode());
+        course.setDuration(courseDto.duration());
+        course.setFee(courseDto.fee());
+        course.setDescription(courseDto.description());
+        course.setActive(courseDto.active());
+
+        Courses updated = courseRepository.save(course);
+
+        return new CourseDto(
+                updated.getId(),
+                updated.getCourseName(),
+                updated.getCourseCode(),
+                updated.getDuration(),
+                updated.getFee(),
+                updated.getDescription(),
+                updated.isActive()
+        );
+    }
+
+    @Override
+    public boolean existsByCourseCodeAndIdNot(String code, Long id) {
+        return courseRepository.existsByCourseCodeIgnoreCaseAndIdNot(code, id);
     }
 }
