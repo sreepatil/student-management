@@ -1,5 +1,6 @@
 package com.shubham.student_management.service.impl;
 
+import com.shubham.student_management.dto.CourseDto;
 import com.shubham.student_management.dto.StudentDto;
 import com.shubham.student_management.entity.Students;
 import com.shubham.student_management.mapper.StudentMapper;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +31,6 @@ public class StudentServiceImpl implements StudentService {
         log.info("saving student data");
         Students student = studentMapper.toEntity(studentDto);
         return studentMapper.toDto(studentRepository.save(student));
-    }
-
-    @Override
-    public Page<StudentDto> getStudent(int page, int size) {
-
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.Direction.DESC, "id");
-
-        return studentRepository.findByActiveTrue(pageRequest)
-                .map(studentMapper::toDto);
     }
 
     @Override
@@ -78,4 +73,13 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByActive(active, pageRequest)
                 .map(studentMapper::toDto);
     }
+
+    @Override
+    public List<StudentDto> getAllStudents() {
+        return studentRepository.findByActiveTrue()
+                .stream()
+                .map(studentMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

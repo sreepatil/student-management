@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,6 +42,11 @@ public class Students {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "student",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private Set<Enrollment> enrollment = new HashSet<>();
 
     @PrePersist
     public void onCreate() {

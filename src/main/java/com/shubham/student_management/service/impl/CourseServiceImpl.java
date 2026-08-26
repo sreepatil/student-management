@@ -12,6 +12,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -70,5 +73,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean existsByCourseCodeAndIdNot(String code, Long id) {
         return courseRepository.existsByCourseCodeIgnoreCaseAndIdNot(code, id);
+    }
+
+    @Override
+    public List<CourseDto> getAllCourses() {
+        return courseRepository.findByActiveTrue(Sort.by("courseName"))
+                .stream()
+                .map(courseMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

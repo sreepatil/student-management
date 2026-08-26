@@ -3,6 +3,8 @@ package com.shubham.student_management.service;
 import com.shubham.student_management.dto.CourseDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface CourseService {
 
     CourseDto createCourse(CourseDto courseDto);
@@ -16,4 +18,6 @@ public interface CourseService {
     CourseDto updateCourse(Long id, CourseDto courseDto);
 
     boolean existsByCourseCodeAndIdNot(String code, Long id);
+
+    List<CourseDto> getAllCourses();
 }
