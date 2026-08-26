@@ -11,6 +11,8 @@ public interface StudentRepository extends JpaRepository<Students, Long> {
 
     Page<Students> findByActiveTrue(Pageable pageable);
 
+    Page<Students> findByActive(boolean active, Pageable pageable);
+
     boolean existsByEmailIgnoreCaseAndIdNot(String email,Long id);
 
 }

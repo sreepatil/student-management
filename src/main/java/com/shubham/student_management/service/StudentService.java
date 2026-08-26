@@ -17,4 +17,5 @@ public interface StudentService {
 
     boolean existsByEmailAndIdNot( String email, Long id);
 
+    Page<StudentDto> getStudents(int page, int size, boolean active);
 }

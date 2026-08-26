@@ -4,6 +4,7 @@ import com.shubham.student_management.dto.StudentDto;
 import com.shubham.student_management.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/students")
+@Slf4j
 public class StudentController {
 
     private final StudentService studentService;
@@ -41,12 +43,14 @@ public class StudentController {
     public String listStudents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "true") boolean active,
             Model model) {
 
         Page<StudentDto> students =
-                studentService.getStudent(page, size);
+                studentService.getStudents(page, size, active);
 
         model.addAttribute("students", students);
+        model.addAttribute("active", active);
 
         return "students";
     }
@@ -56,12 +60,14 @@ public class StudentController {
             @Valid @ModelAttribute("studentDto") StudentDto studentDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+        log.info("Post/save - create student request received");
 
         if (bindingResult.hasErrors()) {
             return "add-student";
         }
 
         if (studentService.existsByEmail(studentDto.email())) {
+            log.error("Post/save - email must be unique");
 
             bindingResult.rejectValue(
                     "email",
@@ -138,4 +144,5 @@ public class StudentController {
 
         return "redirect:/students/list";
     }
+
 }

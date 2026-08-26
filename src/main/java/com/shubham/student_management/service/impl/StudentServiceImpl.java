@@ -6,6 +6,7 @@ import com.shubham.student_management.mapper.StudentMapper;
 import com.shubham.student_management.repository.StudentRepository;
 import com.shubham.student_management.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
@@ -22,6 +24,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto createStudent(StudentDto studentDto) {
+        log.info("saving student data");
         Students student = studentMapper.toEntity(studentDto);
         return studentMapper.toDto(studentRepository.save(student));
     }
@@ -57,11 +60,22 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean existsByEmail(String email) {
+        log.info("mail from student data");
         return studentRepository.existsByEmailIgnoreCase(email);
     }
 
     @Override
     public boolean existsByEmailAndIdNot(String email, Long id) {
         return studentRepository.existsByEmailIgnoreCaseAndIdNot(email, id);
+    }
+
+    @Override
+    public Page<StudentDto> getStudents(int page, int size, boolean active) {
+
+        PageRequest pageRequest =
+                PageRequest.of(page, size, Sort.Direction.DESC, "id");
+
+        return studentRepository.findByActive(active, pageRequest)
+                .map(studentMapper::toDto);
     }
 }
