@@ -4,6 +4,8 @@ import com.shubham.student_management.dto.EnrollmentDto;
 import com.shubham.student_management.dto.EnrollmentSummaryDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface EnrollmentService {
 
     void enrollmentStudentToCourses(EnrollmentDto enrollmentDto);
@@ -11,5 +13,7 @@ public interface EnrollmentService {
     Page<EnrollmentSummaryDto> getEnrolledStudents(int page, int size, boolean active);
 
     EnrollmentSummaryDto findEnrolledStudentCourseDetails(Long studentId);
+
+    List<EnrollmentSummaryDto> getRecentlyEnrolledStudents();
 
 }

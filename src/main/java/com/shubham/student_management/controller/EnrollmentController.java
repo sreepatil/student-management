@@ -73,12 +73,14 @@ public class EnrollmentController {
     @GetMapping("/getStudentEnrollmentDetails/{id}")
     public String getStudentEnrollmentDetails(
             @PathVariable Long id,
-            Model model) {
+            Model model,
+            @RequestParam(defaultValue = "enrollments") String source) {
 
         EnrollmentSummaryDto enrollmentSummaryDto =
                 enrollmentService.findEnrolledStudentCourseDetails(id);
 
         model.addAttribute("enrollmentSummaryDto", enrollmentSummaryDto);
+        model.addAttribute("source", source);
 
         return "enrollment-details";
     }
