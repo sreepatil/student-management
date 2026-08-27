@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head}"></head>
+
+<body>
+
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+        <!-- Navbar -->
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- Main Content -->
+        <div class="container-fluid px-4 py-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-1">Settings</h2>
+                    <p class="text-muted mb-0">
+                        Manage your application settings.
+                    </p>
+                </div>
+
+                <a th:href="@{/dashboard}"
+                   class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+
+            <div id="settingsMessage"
+                 class="alert alert-success text-center d-none"
+                 role="alert">
+                Settings saved successfully!
+            </div>
+
+            <div class="row">
+
+                <!-- Account Settings -->
+                <div class="col-lg-6 mb-4">
+
+                    <div class="card h-100">
+
+                        <div class="card-header bg-white">
+                            <i class="bi bi-person-gear me-1"></i>
+                            Account Settings
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    Username
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       th:value="${#authentication.name}"
+                                       readonly>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    Role
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       value="ADMIN"
+                                       readonly>
+                            </div>
+
+                            <div>
+                                <label class="form-label fw-semibold">
+                                    Account Status
+                                </label>
+
+                                <div>
+                                    <span class="badge bg-success fs-6">
+                                        Active
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Application Settings -->
+                <div class="col-lg-6 mb-4">
+
+                    <div class="card h-100">
+
+                        <div class="card-header bg-white">
+                            <i class="bi bi-sliders me-1"></i>
+                            Application Settings
+                        </div>
+
+                        <div class="card-body">
+
+                            <!-- Email Notifications -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                                <div>
+                                    <h6 class="mb-1">
+                                        Email Notifications
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Receive application notifications
+                                    </small>
+                                </div>
+
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="emailNotifications">
+                                </div>
+
+                            </div>
+
+                            <!-- Confirmation Messages -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                                <div>
+                                    <h6 class="mb-1">
+                                        Show Confirmations
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Show confirmation messages after actions
+                                    </small>
+                                </div>
+
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="showConfirmations">
+                                </div>
+
+                            </div>
+
+                            <!-- Dark Mode -->
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <h6 class="mb-1">
+                                        Dark Mode
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Change application appearance
+                                    </small>
+                                </div>
+
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="darkMode">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-white text-end">
+
+                            <button type="button"
+                                    id="saveSettings"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-check-lg me-1"></i>
+                                Save Settings
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-4 bg-light mt-auto border-top">
+
+            <div class="container-fluid px-4">
+
+                <div class="d-flex align-items-center justify-content-between small">
+
+                    <div class="text-muted">
+                        Copyright &copy; Student Management System 2026
+                    </div>
+
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </footer>
+
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const emailNotifications =
+            document.getElementById("emailNotifications");
+
+        const showConfirmations =
+            document.getElementById("showConfirmations");
+
+        const darkMode =
+            document.getElementById("darkMode");
+
+        const saveSettings =
+            document.getElementById("saveSettings");
+
+        const settingsMessage =
+            document.getElementById("settingsMessage");
+
+
+        /* Load saved settings */
+
+        emailNotifications.checked =
+            localStorage.getItem("emailNotifications") === "true";
+
+        showConfirmations.checked =
+            localStorage.getItem("showConfirmations") === "true";
+
+        darkMode.checked =
+            localStorage.getItem("darkMode") === "true";
+
+
+        /* Apply dark mode immediately */
+
+        applyDarkMode();
+
+
+        /* Save */
+
+        saveSettings.addEventListener("click", function () {
+
+            localStorage.setItem(
+                "emailNotifications",
+                emailNotifications.checked
+            );
+
+            localStorage.setItem(
+                "showConfirmations",
+                showConfirmations.checked
+            );
+
+            localStorage.setItem(
+                "darkMode",
+                darkMode.checked
+            );
+
+            applyDarkMode();
+
+            settingsMessage.classList.remove("d-none");
+
+            setTimeout(function () {
+                settingsMessage.classList.add("d-none");
+            }, 3000);
+
+        });
+
+
+        /* Dark mode */
+
+        function applyDarkMode() {
+
+            document.body.classList.toggle(
+                "dark-mode",
+                darkMode.checked
+            );
+
+        }
+
+    });
+</script>
+
+
+</body>
+</html>
