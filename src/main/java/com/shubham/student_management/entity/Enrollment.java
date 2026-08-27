@@ -1,6 +1,5 @@
 package com.shubham.student_management.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 

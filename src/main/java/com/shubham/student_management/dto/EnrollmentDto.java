@@ -1,8 +1,8 @@
 package com.shubham.student_management.dto;
 
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class EnrollmentDto {
 
-    @NotBlank(message = "Student is required")
+    @NotNull(message = "Student is required")
     private Long studentId;
 
     @NotEmpty(message = "Select atLeast one course")

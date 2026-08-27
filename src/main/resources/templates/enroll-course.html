@@ -22,7 +22,13 @@
                     </div>
                 </div>
 
-                <form th:action="@{/enrollments/enrollCourse}" th:object="${enrollmentDto}" method="post">
+                <form th:action="@{/enrollments/enrollCourse}"
+                      th:object="${enrollmentDto}"
+                      method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}"/>
                     <div class="row g-4">
                         <!-- Left: Course selection -->
                         <div class="col-lg-8">
@@ -117,7 +123,10 @@
                                             <li>No course selected</li>
                                         </ul>
                                         <div class="d-flex flex-wrap gap-2">
-                                            <button class="btn btn-outline-secondary flex-grow-1"><i class="bi bi-arrow-left me-1"></i> Cancel</button>
+                                            <a th:href="@{/students/list}"
+                                               class="btn btn-outline-secondary flex-grow-1">
+                                                <i class="bi bi-arrow-left me-1"></i> Cancel
+                                            </a>
                                             <button type="submit" class="btn btn-primary flex-grow-1"><i class="bi bi-check2-circle me-1"></i> Enroll</button>
                                         </div>
                                     </div>
@@ -132,61 +141,61 @@
 
     <div th:replace="~{fragments/layout :: scripts}"></div>
 
-<!--        <script th:inline="javascript">-->
+        <script th:inline="javascript">
 
-<!--            const checkboxes = document.querySelectorAll(".course-checkbox");-->
-<!--            const selectedCourseCount = document.getElementById("selectedCourseCount");-->
-<!--            const totalfees = document.getElementById("totalfees");-->
-<!--            const selectedCourses = document.getElementById("selectedCourses");-->
-<!--            const selectedStudent  = document.getElementById("selectedStudent");-->
-<!--            const selectedEmail = document.getElementById("selectedEmail");-->
-<!--            const studentSelect = document.getElementById("studentSelect");-->
+            const checkboxes = document.querySelectorAll(".course-checkbox");
+            const selectedCourseCount = document.getElementById("selectedCourseCount");
+            const totalfees = document.getElementById("totalfees");
+            const selectedCourses = document.getElementById("selectedCourses");
+            const selectedStudent  = document.getElementById("selectedStudent");
+            const selectedEmail = document.getElementById("selectedEmail");
+            const studentSelect = document.getElementById("studentSelect");
 
-<!--            function updateSummary() {-->
-<!--                let selected = [];-->
-<!--                let total = 0;-->
-<!--                checkboxes.forEach(cb => {-->
-<!--                    if(cb.checked) {-->
-<!--                        selected.push({-->
-<!--                            name: cb.dataset.name,-->
-<!--                            fee: cb.dataset.fee-->
-<!--                        })-->
+            function updateSummary() {
+                let selected = [];
+                let total = 0;
+                checkboxes.forEach(cb => {
+                    if(cb.checked) {
+                        selected.push({
+                            name: cb.dataset.name,
+                            fee: cb.dataset.fee
+                        })
 
-<!--                        const fee = parseFloat(cb.dataset.fee || "0")-->
-<!--                        total = total + fee;-->
-<!--                    }-->
+                        const fee = parseFloat(cb.dataset.fee || "0")
+                        total = total + fee;
+                    }
 
-<!--                });-->
+                });
 
-<!--                selectedCourseCount.textContent = selected.length.toString();-->
-<!--                totalfees.textContent = "Rs."+ total;-->
+                selectedCourseCount.textContent = selected.length.toString();
+                totalfees.textContent = "Rs."+ total;
 
-<!--                selectedCourses.innerHTML = "";-->
-<!--                if(selected.length == 0) {-->
-<!--                    selectedCourses.innerHTML = "<li>No course selected</li>";-->
-<!--                } else {-->
-<!--                    selected.forEach(item => {-->
-<!--                        const li = document.createElement("li");-->
-<!--                        li.textContent = `${item.name} Rs.${item.fee}`-->
-<!--                        selectedCourses.appendChild(li);-->
-<!--                    });-->
-<!--                }-->
-<!--            }-->
+                selectedCourses.innerHTML = "";
+                if(selected.length == 0) {
+                    selectedCourses.innerHTML = "<li>No course selected</li>";
+                } else {
+                    selected.forEach(item => {
+                        const li = document.createElement("li");
+                        li.textContent = `${item.name} Rs.${item.fee}`
+                        selectedCourses.appendChild(li);
+                    });
+                }
+            }
 
-<!--            function updateStudent() {-->
-<!--                const studentValues = studentSelect && studentSelect.value ? studentSelect.options[studentSelect.selectedIndex] : null;-->
-<!--                selectedStudent.textContent = studentValues ? studentValues.dataset.name : '';-->
-<!--                selectedEmail.textContent = studentValues ? studentValues.dataset.email : '';-->
-<!--            }-->
+            function updateStudent() {
+                const studentValues = studentSelect && studentSelect.value ? studentSelect.options[studentSelect.selectedIndex] : null;
+                selectedStudent.textContent = studentValues ? studentValues.dataset.name : '';
+                selectedEmail.textContent = studentValues ? studentValues.dataset.email : '';
+            }
 
 
-<!--            document.addEventListener("DOMContentLoaded", () => {-->
-<!--                checkboxes.forEach(cb => cb.addEventListener("change", updateSummary))-->
+            document.addEventListener("DOMContentLoaded", () => {
+                checkboxes.forEach(cb => cb.addEventListener("change", updateSummary))
 
-<!--                if(studentSelect) {-->
-<!--                    studentSelect.addEventListener("change", updateStudent)-->
-<!--                }-->
-<!--            });-->
-<!--        </script>-->
+                if(studentSelect) {
+                    studentSelect.addEventListener("change", updateStudent)
+                }
+            });
+        </script>
     </body>
 </html>
