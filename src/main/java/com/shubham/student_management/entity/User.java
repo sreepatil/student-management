@@ -1,10 +1,13 @@
 package com.shubham.student_management.entity;
 
+import com.shubham.student_management.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.security.PrivateKey;
 
 @Getter
 @Setter
@@ -26,4 +29,8 @@ public class User {
 
     @Column(nullable = false)
     private boolean active;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 }
